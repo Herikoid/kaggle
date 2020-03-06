@@ -11,10 +11,6 @@ from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.metrics import mean_squared_error
 from statistics import mean
 
-# # visualization
-# import seaborn as sns
-# import matplotlib.pyplot as plt
-
 # time measurement
 import datetime
 
@@ -29,22 +25,21 @@ os.chdir('/home/mikhail/PycharmProjects/kaggle/HousePrices')
 data_train = pd.read_csv('input/train.csv')
 data_test = pd.read_csv('input/test.csv')
 
-# # getting a general look at features
-# print(data_train.info())
-# print('_' * 40)
-# print(data_test.info())
-#
-# # getting summary about features
-# print(data_train.describe())
-# print(data_train.describe(include=['O']))
-#
-# # Visualization
+# getting a general look at features
+print(data_train.info())
+print('_' * 40)
+print(data_test.info())
+
+# getting summary about features
+print(data_train.describe())
+print(data_train.describe(include=['O']))
 
 # saving 'Id' column for submission
 Id = data_test['Id']
 
-# Dropping features
+# Data preprocessing
 
+# dropping features
 data_train = data_train.drop(['Id', 'Alley', 'PoolQC', 'Fence', 'MiscFeature'], axis=1)
 data_test = data_test.drop(['Id', 'Alley', 'PoolQC', 'Fence', 'MiscFeature'], axis=1)
 
@@ -73,18 +68,20 @@ X_test_cat = data_test[cat_features]
 X_train_cat.fillna('nan', inplace=True)
 X_test_cat.fillna('nan', inplace=True)
 
-# Creation of binary features from categorical
+# creation of binary features from categorical
 enc = DictVectorizer()
 X_train_cat = enc.fit_transform(X_train_cat.to_dict('records'))
 X_test_cat = enc.transform(X_test_cat.to_dict('records'))
 
-# Features reuniting
+# features reuniting
 X_train = np.hstack([X_train_num, X_train_cat.toarray()])
 X_test = np.hstack([X_test_num, X_test_cat.toarray()])
 
+# Machine learning
+
 start_time = datetime.datetime.now()
 
-# Finding best number of trees for gradient boosting using cross-validation
+# finding best number of trees for gradient boosting using cross-validation
 score = []
 for k in range(201, 220, 1):
     start_time_temp = datetime.datetime.now()
@@ -101,26 +98,19 @@ for k in range(201, 220, 1):
         )
     score.append([mean(cv_score), k, datetime.datetime.now() - start_time_temp])
 
-# # Finding best number of trees for gradient boosting using cross-validation
-# score = []
-# for k in range(100, 200, 10):
-#     clf = GradientBoostingRegressor(n_estimators=k, random_state=1)
-#     cv_score = cross_val_score(clf, X_train, y_train, scoring='accuracy',
-#                                cv=KFold(n_splits=5, random_state=1))
-#     score.append([cv_score.mean(), k, 3])
-
-
-# Fitting classifier
+# fitting classifier
 rgr = GradientBoostingRegressor(n_estimators=min(score)[1], random_state=1).fit(X_train, y_train)
 
-# Getting prediction for test sample
+# getting prediction for test sample
 y_pred = rgr.predict(X_test)
 
-# Writing prediction to the file
+print('Time passed:', datetime.datetime.now() - start_time)
+
+# Output
+
+# writing prediction to the file
 prediction = pd.DataFrame({
         'Id': Id,
         'SalePrice': y_pred
     })
 prediction.to_csv('output/gb_ca.csv', index=False)
-
-print(datetime.datetime.now() - start_time)
