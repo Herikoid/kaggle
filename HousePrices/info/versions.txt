@@ -1,0 +1,5 @@
+gb_ca.py
+gradient boosting with casual analysis:
+na for numeric is mean for each column, na for categorical is 'nan', columns 'Alley', 'PoolQC', 'Fence', 'MiscFeature'
+were removed because of high percent of na values
+output: gb_ca.csv
