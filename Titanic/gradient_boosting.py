@@ -62,6 +62,7 @@ X_test_text = vectorizer.transform(X_test_text)
 # Categorical features extraction
 X_train_categ = data_train[['Cabin', 'Embarked']]
 X_test_categ = data_test[['Cabin', 'Embarked']]
+
 # NA processing
 X_train_categ.fillna('nan', inplace=True)
 X_test_categ.fillna('nan', inplace=True)
@@ -80,7 +81,7 @@ X_test = np.hstack([X_test_num, X_test_categ.toarray(), X_test_text.toarray()])
 # Finding best number of trees for gradient boosting using cross-validation
 score = []
 for k in range(100, 200, 10):
-    clf = GradientBoostingClassifier(n_estimators=100, random_state=1)
+    clf = GradientBoostingClassifier(n_estimators=k, random_state=1)
     cv_score = cross_val_score(clf, X_train, y_train, scoring='accuracy',
                                cv=KFold(n_splits=5, random_state=1))
     score.append([cv_score.mean(), k, 3])
