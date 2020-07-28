@@ -3,3 +3,14 @@ gradient boosting with casual analysis:
 na for numeric is mean for each column, na for categorical is 'nan', columns 'Alley', 'PoolQC', 'Fence', 'MiscFeature'
 were removed because of high percent of na values
 output: gb_ca.csv
+score: 0.13260
+
+train_analysis.py
+train data analysis
+code from kaggle notebook
+notebook url: https://www.kaggle.com/pmarcelino/comprehensive-data-exploration-with-python
+
+gb_na.py
+gradient boosting with analysis from train_analysis.py
+output: gb_na.csv
+score: 0.13715
