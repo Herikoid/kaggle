@@ -14,3 +14,10 @@ gb_na.py
 gradient boosting with analysis from train_analysis.py
 output: gb_na.csv
 score: 0.13715
+
+hp_notebook.py
+solving solving the task using various algorithms
+code form kaggle notebook
+notebook url: https://www.kaggle.com/serigne/stacked-regressions-top-4-on-leaderboard
+output: hp_notebook.py
+score: 0.11968
